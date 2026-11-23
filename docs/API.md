@@ -2,7 +2,8 @@
 
 移动端不直接推理，所有数据与任务都通过电脑端 XB-SVCB 的 FastAPI 服务完成。
 本文档记录移动端实际依赖的接口、字段和版本要求；桌面端的完整契约见
-`../翻唱工具/docs/api.md`，运行中的 Swagger 文档见 `http://电脑IP:8760/docs`。
+<https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md>，运行中的 Swagger
+文档见 `http://电脑IP:8760/docs`。
 
 ## 连接
 

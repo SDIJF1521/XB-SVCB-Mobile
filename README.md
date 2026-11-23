@@ -1,12 +1,10 @@
 # XB-SVCB Mobile
 
-XB-SVCB 的 Android 伴生客户端，现已从桌面端仓库独立，与 `翻唱工具` 项目同级。
+XB-SVCB 的 Android 伴生客户端，现已从桌面端仓库独立，拥有独立 Git 仓库。
 
-手机通过电脑端启动的 FastAPI 服务管理翻唱任务、声音模型与素材；真正的推理、
-音频编辑、精细时间轴和自定义工作流仍然在电脑上完成。
-
-- 桌面端项目：`../翻唱工具`
-- 桌面端 API 文档：`../翻唱工具/docs/api.md`
+- 本仓库：<https://github.com/SDIJF1521/XB-SVCB-Mobile>
+- 桌面端项目：<https://github.com/SDIJF1521/xb-svcb>
+- 桌面端 API 文档：<https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md>
 - 独立许可：GPL-3.0-only
 
 <p align="center">
@@ -161,8 +159,8 @@ API 默认端口 8760，但以电脑端页面显示为准。地址与 Key 只保
 移动端依赖的接口、参数与约束见 [docs/API.md](docs/API.md)。新增的素材、
 歌词、时长与在线下载接口需要更新并重启桌面端：
 
-- `../翻唱工具/app/api/http_server.py`
-- `../翻唱工具/docs/api.md`
+- [app/api/http_server.py](https://github.com/SDIJF1521/xb-svcb/blob/dev/app/api/http_server.py)
+- [docs/api.md](https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md)
 
 FastAPI 自动文档：`http://电脑IP:8760/docs`。
 
