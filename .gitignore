@@ -1,0 +1,51 @@
+# 依赖
+web/node_modules/
+tools/node_modules/
+node_modules/
+
+# 前端与 APK 构建产物
+web/dist/
+build/
+dist/
+*.apk
+
+# 本地工具、缓存与浏览器数据
+tools/android-sdk/
+tools/.cache/
+tools/.extract/
+tools/.npm-cache/
+tools/.edge-data/
+.edge-*/
+.screenshots/
+.npm-cache/
+
+# 签名密钥（首次构建自动生成，请勿提交）
+.keystore/
+*.jks
+*.keystore
+signing/
+
+# 本地环境与日志
+.env
+.env.*
+!.env.example
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# 编辑器与系统
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python 缓存（仅用于工具脚本）
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Visual Studio / 编辑器缓存
+.vs/

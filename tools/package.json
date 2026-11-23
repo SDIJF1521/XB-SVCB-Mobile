@@ -1,0 +1,10 @@
+{
+  "name": "xb-svcb-mobile-tools",
+  "version": "0.1.2",
+  "private": true,
+  "type": "commonjs",
+  "description": "XB-SVCB 移动端构建、Mock 服务与截图工具（不进入 APK 运行时）",
+  "dependencies": {
+    "puppeteer-core": "^24.43.1"
+  }
+}
