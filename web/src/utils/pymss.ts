@@ -7,8 +7,6 @@ const FORBIDDEN_STEMS = [
   'speaker',
   'dialog',
   'duet',
-  'harmony',
-  'karaoke',
   'bass',
   'drum',
   'guitar',
@@ -41,7 +39,8 @@ function normalizeStems(model: PymssModel): string[] {
  * 目录里的 purpose 并不总是可靠：像 instvox_duality 这类双向模型，
  * 分类可能不在桌面的 vocal_extraction 白名单里，purpose 为空，但它的
  * target_stems 明确是 vocals/instrumental。这里优先相信目标音轨，
- * purpose 仅作为没有音轨元数据时的回退。
+ * purpose 仅作为没有音轨元数据时的回退；双人/二重唱、合唱、男女声、
+ * 语音、多轨、单乐器模型仍排除，卡拉OK/和声的 backing_vocal 模型允许。
  */
 export function isCoverSeparationModel(model: PymssModel): boolean {
   if (model.purpose === 'dereverb' || model.purpose === 'harmony_removal') return false
@@ -49,7 +48,7 @@ export function isCoverSeparationModel(model: PymssModel): boolean {
   const stems = normalizeStems(model)
   const name = model.name.toLowerCase()
   const nameLooksUnsafe =
-    /(^|[^a-z0-9])(inst|instrumental|karaoke|multi|speech|speaker|male|female|duet|guitar|bass|drum|piano)([^a-z0-9]|$)/i.test(
+    /(^|[^a-z0-9])(inst|instrumental|multi|speech|speaker|male|female|duet|guitar|bass|drum|piano)([^a-z0-9]|$)/i.test(
       name,
     )
   const hasVocal = stems.some((stem) => /vocal|voice|人声/.test(stem))
@@ -57,9 +56,24 @@ export function isCoverSeparationModel(model: PymssModel): boolean {
     /instrument|accompani|inst$|伴奏/.test(stem),
   )
   const isInstVox = /instvox|inst_vox|instrumental[_-]?vocal|duality/i.test(name)
+  const description = [
+    model.category_label,
+    model.primary_category_label,
+    model.secondary_category_label,
+    model.purpose_label,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+  const descriptionLooksUnsafe =
+    /双人|二重唱|对唱|合唱|男女声|男声|女声|语音|说话|多轨|单乐器|duet|duo|chorus|male.?female|speech|speaker|multi|instrument|guitar|bass|drum|piano/i.test(
+      description,
+    )
 
-  // 纯伴奏/多轨/语音模型即使目录元数据误标，也不能进入翻唱。
-  // instvox / inst_vox / duality 这类“人声-伴奏双向”命名例外。
+  // 分类名明确是双人/二重唱、合唱、男女声、语音或多轨/单乐器时，
+  // 即使 target_stems 只有 vocals 也不是整曲翻唱可用的人声分离模型。
+  // 卡拉OK/和声的 backing_vocal 模型仍允许。
+  if (descriptionLooksUnsafe) return false
   if (nameLooksUnsafe && !isInstVox) return false
 
   if (!stems.length) {
