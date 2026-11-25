@@ -231,6 +231,7 @@ const pymssModels = [
   ['6_HP-Kim_Vocal_2.onnx', 'UVR', 'vocal_separation', '人声分离', '人声 / 伴奏', 66, false],
   ['UVR-MDX23C-vocals', 'MDX23C', 'vocal_separation', '人声分离', '人声 / 伴奏', 310, false],
   ['melband_roformer_instvox_duality_v2.ckpt', 'Mel-Band RoFormer', '', '人声 / 人声-伴奏双向分离', 'vocals / instrumental', 780, true],
+  ['mel_band_roformer_karaoke_gabox_v2.ckpt', 'Mel-Band RoFormer', '', '卡拉OK/和声', 'backing_vocal', 410, true],
 ].map(([name, architecture, purpose, categoryLabel, target, size, downloaded]) => ({
   name,
   architecture,
