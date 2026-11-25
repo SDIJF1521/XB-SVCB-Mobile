@@ -49,7 +49,7 @@ export function isCoverSeparationModel(model: PymssModel): boolean {
   const stems = normalizeStems(model)
   const name = model.name.toLowerCase()
   const nameLooksUnsafe =
-    /(^|[_-])(inst|instrumental|karaoke|multi|speech|speaker|male|female|duet|guitar|bass|drum|piano)([_-]|$)/i.test(
+    /(^|[^a-z0-9])(inst|instrumental|karaoke|multi|speech|speaker|male|female|duet|guitar|bass|drum|piano)([^a-z0-9]|$)/i.test(
       name,
     )
   const hasVocal = stems.some((stem) => /vocal|voice|人声/.test(stem))
