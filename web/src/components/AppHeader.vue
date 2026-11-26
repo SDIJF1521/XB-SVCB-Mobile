@@ -67,7 +67,7 @@ function goCreate(): void {
   justify-content: space-between;
   gap: 10px;
   flex: 0 0 auto;
-  padding: calc(8px + env(safe-area-inset-top)) 16px 9px;
+  padding: calc(8px + env(safe-area-inset-top)) var(--xb-pad-x) 9px;
   background: linear-gradient(180deg, rgba(var(--xb-bg-rgb), 0.94), rgba(var(--xb-bg-rgb), 0.6));
   border-bottom: 1px solid rgba(var(--xb-primary-rgb), 0.1);
   backdrop-filter: blur(18px);
@@ -86,7 +86,9 @@ function goCreate(): void {
   display: grid;
   place-items: center;
   width: 36px;
+  width: clamp(32px, 9.6vw, 36px);
   height: 36px;
+  height: clamp(32px, 9.6vw, 36px);
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(var(--xb-primary-rgb), 0.28);
@@ -108,6 +110,7 @@ function goCreate(): void {
 
 .brand-text b {
   font-size: 15px;
+  font-size: clamp(14px, 4vw, 15px);
   font-weight: 900;
   letter-spacing: 0.4px;
 }
@@ -130,12 +133,14 @@ function goCreate(): void {
   align-items: center;
   gap: 6px;
   height: 30px;
-  padding: 0 10px;
+  height: clamp(28px, 7.8vw, 30px);
+  padding: 0 clamp(8px, 2.6vw, 10px);
   border: 1px solid var(--xb-border);
   border-radius: 999px;
   background: rgba(var(--xb-fill-rgb), 0.04);
   color: var(--xb-muted);
   font-size: 10px;
+  font-size: clamp(9.5px, 2.6vw, 10px);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -163,11 +168,13 @@ function goCreate(): void {
   align-items: center;
   gap: 4px;
   height: 34px;
-  padding: 0 12px;
+  height: clamp(31px, 8.7vw, 34px);
+  padding: 0 clamp(10px, 3.1vw, 12px);
   border-radius: 11px;
   background: var(--xb-brand-gradient);
   color: var(--xb-on-primary);
   font-size: 11px;
+  font-size: clamp(10.5px, 2.9vw, 11px);
   font-weight: 800;
   box-shadow: 0 6px 18px rgba(var(--xb-primary-rgb), 0.3);
 }

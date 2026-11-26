@@ -2,9 +2,9 @@
 
 XB-SVCB 的 Android 伴生客户端，现已从桌面端仓库独立，拥有独立 Git 仓库。
 
-- 本仓库：<https://github.com/SDIJF1521/XB-SVCB-Mobile>
-- 桌面端项目：<https://github.com/SDIJF1521/xb-svcb>
-- 桌面端 API 文档：<https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md>
+- 本仓库：[https://github.com/SDIJF1521/XB-SVCB-Mobile](https://github.com/SDIJF1521/XB-SVCB-Mobile)
+- 桌面端项目：[https://github.com/SDIJF1521/xb-svcb](https://github.com/SDIJF1521/xb-svcb)
+- 桌面端 API 文档：[https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md](https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md)
 - 独立许可：GPL-3.0-only
 
 <p align="center">
@@ -71,6 +71,22 @@ XB-SVCB 的 Android 伴生客户端，现已从桌面端仓库独立，拥有独
 - 前端构建为单一 IIFE，`tools/postbuild.js` 把 `type="module"` 改为 `defer`，
   以适配 `file://` 加载。
 - APK 使用 `aapt2` + `javac` + `d8` + `zipalign` + `apksigner` 手工构建并签名。
+- 自适应布局：以 390×844 为基准的 `clamp()` 尺寸令牌，窄屏收紧、宽屏封顶，
+  矮屏压缩纵向节奏（见 [docs/UI.md](docs/UI.md)）。
+
+## 界面自适应
+
+页面尺寸不写死：所有页面共用 `web/src/style.css` 里的一组尺寸令牌，
+以 390×844 为 1× 基准随屏宽缩放，320px 窄屏收紧、390–440px 陆续封顶；
+屏幕高度 ≤700px 时压缩标题、控件与间距，≤560px 再压一档。
+
+- 连接页与其它页面使用同一套字号与边距（标题 24px、页面边距 16px、卡片 14px），
+  不再单独放大；360×640 及以上可完整一屏放下，320×568 与横屏可滚动。
+- 页头、底部标签栏、输入框、按钮、卡片圆角共用令牌，缩放规则一致。
+- 关闭安卓 WebView 的字体放大（`text-size-adjust: 100%`），各机型字号一致。
+
+尺寸令牌、断点与新增页面的接入方式见 [docs/UI.md](docs/UI.md)；
+多机型截图与测量见下文「开发与本地 Mock」。
 
 ## 目录
 
@@ -91,11 +107,13 @@ XB-SVCB-Mobile/
 ├─ tools/
 │  ├─ mock-server.js       # 本地 API mock
 │  ├─ shoot.js             # Edge + Puppeteer 截图
+│  ├─ shoot-sizes.js       # 多机型截图与布局测量
 │  ├─ prepare-sdk.ps1      # 下载 Android SDK
 │  ├─ make-icons.py
 │  └─ postbuild.js
 ├─ docs/
 │  ├─ API.md               # 依赖的电脑端接口
+│  ├─ UI.md                # 界面自适应与布局规范
 │  └─ screenshots/
 ├─ build-apk.ps1
 └─ README.md
@@ -199,6 +217,16 @@ node tools/shoot.js tasks create models pymss settings
 
 截图写入 `.screenshots/`，已被忽略。场景列表见 `tools/shoot.js`。
 
+多机型自适应校验（同一套 mock 服务，320×568 / 360×640 / 360×780 /
+390×844 / 412×915 / 横屏 780×360）：
+
+```powershell
+node tools/shoot-sizes.js current connect tasks settings models materials create
+```
+
+截图与 `report.json` 写入 `.screenshots/sizes/<标签>/`，测量项包括标题字号、
+卡片内边距、纵向溢出与横向溢出，判据见 [docs/UI.md](docs/UI.md#验证)。
+
 ## 国际化
 
 - 支持简体中文 / English / 日本語。
@@ -214,6 +242,8 @@ node tools/shoot.js tasks create models pymss settings
 - 前端构建：`node web/build.mjs`。
 - 浏览器实测：390×844、`file://` 构建产物加载、连接、任务、创建、多模型、
   歌词分段、素材下载到电脑、模型站、PyMSS 选择器、设置与语言切换。
+- 自适应布局：320×568、360×640、390×844、412×915、横屏 780×360 逐页截图，
+  各页面均无横向溢出；连接页在 360×640 及以上完整一屏，其余内容页按需滚动。
 - 英文界面逐页扫描：仅剩用户内容与电脑端返回的错误文本为中文。
 - APK 签名 v1/v2/v3 与 `zipalign` 校验。
 - 未在真实 Android 手机上验证文件选择器、DownloadManager 与 `file://` 音频播放，

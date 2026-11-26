@@ -172,25 +172,27 @@ async function connect(): Promise<void> {
 </template>
 
 <style scoped>
+/* 连接页与其它页面共用自适应尺寸令牌：窄屏收紧、宽屏封顶，
+   自身作为滚动容器填满 .app-shell，短屏可滚动而不撑破布局。 */
 .connect-page {
   position: relative;
   z-index: 1;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
-  gap: 18px;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: calc(38px + env(safe-area-inset-top)) 20px calc(26px + env(safe-area-inset-bottom));
-  overflow-y: auto;
+  gap: var(--xb-page-gap);
+  min-height: 0;
+  padding: calc(14px + env(safe-area-inset-top)) var(--xb-pad-x) calc(14px + env(safe-area-inset-bottom));
+  -webkit-overflow-scrolling: touch;
 }
 
 .ambient {
   position: absolute;
-  top: -120px;
+  top: -110px;
   left: 50%;
-  width: 420px;
-  height: 420px;
-  margin-left: -210px;
+  width: min(420px, 118vw);
+  height: min(420px, 118vw);
+  transform: translateX(-50%);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(var(--xb-primary-rgb), 0.18), transparent 66%);
   pointer-events: none;
@@ -205,9 +207,9 @@ async function connect(): Promise<void> {
   position: relative;
   display: grid;
   place-items: center;
-  width: 92px;
-  height: 92px;
-  margin: 0 auto 18px;
+  width: calc(var(--xb-hero-logo) + 8px);
+  height: calc(var(--xb-hero-logo) + 8px);
+  margin: 0 auto clamp(10px, 3vw, 16px);
 }
 
 .logo-halo {
@@ -220,8 +222,8 @@ async function connect(): Promise<void> {
 
 .logo {
   position: relative;
-  width: 84px;
-  height: 84px;
+  width: var(--xb-hero-logo);
+  height: var(--xb-hero-logo);
   border: 1px solid rgba(var(--xb-primary-rgb), 0.4);
   border-radius: 50%;
   overflow: hidden;
@@ -237,25 +239,28 @@ async function connect(): Promise<void> {
 
 h1 {
   margin-top: 9px;
-  font-size: 27px;
+  font-size: 25px;
+  font-size: clamp(20px, 6.4vw, 25px);
   font-weight: 900;
   letter-spacing: -0.8px;
   line-height: 1.2;
 }
 
 .lead {
-  max-width: 300px;
+  max-width: min(300px, 90%);
   margin: 10px auto 0;
   color: var(--xb-muted);
   font-size: 12px;
+  font-size: clamp(11px, 3.1vw, 12px);
   line-height: 1.7;
 }
 
 .connect-card {
-  padding: 16px;
+  padding: var(--xb-card-pad);
   display: flex;
   flex-direction: column;
   gap: 15px;
+  gap: clamp(11px, 3.4vw, 15px);
 }
 
 .reconnect-note {
@@ -287,7 +292,7 @@ h1 {
 .input-icon {
   position: absolute;
   top: 50%;
-  left: 12px;
+  left: clamp(10px, 2.9vw, 12px);
   z-index: 1;
   transform: translateY(-50%);
   color: var(--xb-muted);
@@ -295,14 +300,16 @@ h1 {
 }
 
 .input.with-icon {
-  padding-left: 36px;
+  padding-left: clamp(32px, 8.8vw, 36px);
   font-family: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
   font-size: 13px;
+  font-size: clamp(12.5px, 3.35vw, 13px);
 }
 
 .hint {
   color: var(--xb-muted);
   font-size: 10px;
+  font-size: clamp(9.5px, 2.8vw, 10px);
   line-height: 1.55;
   opacity: 0.85;
 }
@@ -361,6 +368,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  gap: clamp(9px, 2.7vw, 12px);
   padding: 0 4px;
 }
 
@@ -378,12 +386,14 @@ h1 {
 
 .tip b {
   font-size: 12px;
+  font-size: clamp(11.5px, 3.1vw, 12px);
 }
 
 .tip p {
   margin-top: 2px;
   color: var(--xb-muted);
   font-size: 10.5px;
+  font-size: clamp(10px, 2.8vw, 10.5px);
   line-height: 1.55;
 }
 
@@ -395,6 +405,62 @@ h1 {
   letter-spacing: 1px;
   text-align: center;
   opacity: 0.6;
+}
+
+/* 矮屏（小尺寸安卓机 / 横屏）：收掉装饰性副标题、缩小徽标并压缩
+   卡片内的间距，让两个输入框与「连接并进入」按钮在首屏完整可见。 */
+@media (max-height: 700px) {
+  .connect-page {
+    --xb-hero-logo: 60px;
+    --xb-hero-logo: clamp(52px, 15vw, 60px);
+    gap: 9px;
+    padding-top: calc(8px + env(safe-area-inset-top));
+  }
+
+  .connect-hero .kicker {
+    display: none;
+  }
+
+  .logo-wrap {
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    margin-top: 2px;
+  }
+
+  .lead {
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .connect-card {
+    gap: 8px;
+    padding: 11px;
+  }
+
+  .field {
+    gap: 5px;
+  }
+
+  .hint {
+    font-size: 9.5px;
+    line-height: 1.45;
+  }
+
+  .connect-actions {
+    gap: 6px;
+  }
+
+  .tips {
+    gap: 7px;
+  }
+}
+
+@media (max-height: 560px) {
+  .connect-page {
+    --xb-hero-logo: 48px;
+  }
 }
 
 .result-enter-active,

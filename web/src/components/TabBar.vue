@@ -40,7 +40,7 @@ const TABS: { key: AppView; icon: string }[] = [
   display: flex;
   flex: 0 0 auto;
   align-items: stretch;
-  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  padding: var(--xb-tabbar-pad) clamp(6px, 2vw, 8px) calc(var(--xb-tabbar-pad) + env(safe-area-inset-bottom));
   border-top: 1px solid rgba(var(--xb-primary-rgb), 0.12);
   background: linear-gradient(0deg, rgba(var(--xb-bg-rgb), 0.98), rgba(var(--xb-bg-rgb), 0.82));
   backdrop-filter: blur(20px);
@@ -55,7 +55,7 @@ const TABS: { key: AppView; icon: string }[] = [
   align-items: center;
   justify-content: center;
   gap: 2px;
-  height: 52px;
+  height: var(--xb-tab-h);
   border-radius: 14px;
   color: var(--xb-muted);
   transition: color 0.18s ease, background 0.18s ease;
@@ -75,6 +75,7 @@ const TABS: { key: AppView; icon: string }[] = [
   place-items: center;
   width: 34px;
   height: 26px;
+  height: clamp(23px, 6.7vw, 26px);
 }
 
 .tab.on .tab-icon::before {
@@ -93,6 +94,7 @@ const TABS: { key: AppView; icon: string }[] = [
 
 .tab-label {
   font-size: 10px;
+  font-size: clamp(9.5px, 2.6vw, 10px);
   font-weight: 700;
   letter-spacing: 0.3px;
   opacity: 0.86;

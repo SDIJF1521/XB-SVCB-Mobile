@@ -1223,7 +1223,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  padding: calc(10px + env(safe-area-inset-top)) var(--xb-pad-x) 10px;
   background: linear-gradient(180deg, rgba(var(--xb-bg-rgb), 0.97), rgba(var(--xb-bg-rgb), 0.72));
   border-bottom: 1px solid var(--xb-border);
   backdrop-filter: blur(18px);
@@ -1258,7 +1258,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 12px 16px calc(126px + env(safe-area-inset-bottom));
+  gap: var(--xb-page-gap);
+  padding: 12px var(--xb-pad-x) calc(126px + env(safe-area-inset-bottom));
 }
 
 .intro {
@@ -2043,7 +2044,7 @@ onBeforeUnmount(() => {
   gap: 10px;
   width: 100%;
   max-width: 560px;
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  padding: 10px var(--xb-pad-x) calc(10px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--xb-border);
   background: linear-gradient(0deg, rgba(var(--xb-bg-rgb), 0.99), rgba(var(--xb-bg-rgb), 0.9));
   backdrop-filter: blur(18px);
@@ -2089,6 +2090,7 @@ onBeforeUnmount(() => {
   flex: none;
   min-width: 118px;
   height: 46px;
+  height: clamp(42px, 12vw, 46px);
   padding: 0 16px;
   border-radius: 14px;
   background: var(--xb-brand-gradient);

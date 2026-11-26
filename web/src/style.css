@@ -117,6 +117,40 @@ html[data-theme='anime'] {
   --xb-deco-3: #c0a8ff;
 }
 
+/* ============================================================
+   自适应尺寸令牌
+   以 390px 宽的主流安卓机为基准，用 clamp() 随屏宽线性缩放：
+   320px 窄屏自动收紧、412px 以上保持上限，避免同一条页面在小屏
+   上显得拥挤、在大屏上显得过大。每条令牌先给 px 兜底，再给
+   clamp()，未支持 clamp() 的旧版 WebView 会退回固定值。
+   ============================================================ */
+:root {
+  --xb-pad-x: 16px;
+  --xb-pad-x: clamp(12px, 4.1vw, 18px);
+  --xb-page-gap: 14px;
+  --xb-page-gap: clamp(11px, 3.6vw, 14px);
+  --xb-page-title: 24px;
+  --xb-page-title: clamp(19px, 6.15vw, 24px);
+  --xb-card-pad: 14px;
+  --xb-card-pad: clamp(12px, 3.6vw, 15px);
+  --xb-radius-lg: 18px;
+  --xb-radius-lg: clamp(15px, 4.6vw, 18px);
+  --xb-control-h: 44px;
+  --xb-control-h: clamp(40px, 11.3vw, 44px);
+  --xb-icon-btn: 38px;
+  --xb-icon-btn: clamp(34px, 9.7vw, 38px);
+  --xb-tab-h: 52px;
+  --xb-tab-h: clamp(46px, 13.3vw, 52px);
+  --xb-tabbar-pad: 6px;
+  --xb-tabbar-pad: clamp(4px, 1.5vw, 6px);
+  --xb-hero-logo: 84px;
+  --xb-hero-logo: clamp(64px, 21vw, 84px);
+
+  /* 底部留白 = 标签栏 + 呼吸空间，随标签栏高度一起缩放。 */
+  --xb-page-bottom: 104px;
+  --xb-page-bottom: calc(var(--xb-tab-h) + 52px + env(safe-area-inset-bottom));
+}
+
 * {
   box-sizing: border-box;
 }
@@ -126,6 +160,12 @@ body,
 #app {
   height: 100%;
   margin: 0;
+}
+
+/* 关闭安卓 WebView 的字体放大（font boosting），保证各机型字号一致。 */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -217,7 +257,7 @@ button:disabled {
 .glass {
   position: relative;
   border: 1px solid var(--xb-border);
-  border-radius: 18px;
+  border-radius: var(--xb-radius-lg);
   background: linear-gradient(150deg, var(--xb-glass-top), var(--xb-glass-bottom)), var(--xb-panel);
   box-shadow: var(--xb-elev);
   backdrop-filter: blur(16px);
@@ -276,13 +316,14 @@ button:disabled {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  min-height: 42px;
-  padding: 0 16px;
+  min-height: var(--xb-control-h);
+  padding: 0 clamp(12px, 4vw, 16px);
   border: 1px solid var(--xb-border);
   border-radius: 12px;
   background: rgba(var(--xb-fill-rgb), 0.04);
   color: var(--xb-text);
   font-size: 13px;
+  font-size: clamp(12.5px, 3.35vw, 13px);
   font-weight: 700;
   transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
@@ -314,6 +355,7 @@ button:disabled {
 
 .btn--sm {
   min-height: 34px;
+  min-height: clamp(32px, 8.8vw, 34px);
   padding: 0 11px;
   border-radius: 10px;
   font-size: 12px;
@@ -324,15 +366,15 @@ button:disabled {
 }
 
 .btn--icon {
-  width: 42px;
+  width: var(--xb-control-h);
   padding: 0;
 }
 
 .icon-btn {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: var(--xb-icon-btn);
+  height: var(--xb-icon-btn);
   border: 1px solid var(--xb-border);
   border-radius: 11px;
   background: rgba(var(--xb-fill-rgb), 0.035);
@@ -412,6 +454,7 @@ button:disabled {
   gap: 8px;
   color: var(--xb-muted);
   font-size: 11px;
+  font-size: clamp(10.5px, 2.9vw, 11px);
   font-weight: 700;
   letter-spacing: 0.4px;
 }
@@ -420,14 +463,15 @@ button:disabled {
 .textarea,
 .select {
   width: 100%;
-  min-height: 44px;
-  padding: 10px 12px;
+  min-height: var(--xb-control-h);
+  padding: 10px clamp(10px, 3vw, 12px);
   border: 1px solid var(--xb-border);
   border-radius: 12px;
   outline: none;
   background: rgba(var(--xb-bg-rgb), 0.55);
   color: var(--xb-text);
   font-size: 14px;
+  font-size: clamp(13px, 3.6vw, 14px);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -463,6 +507,7 @@ textarea.input {
   flex: 1 1 0;
   min-width: 0;
   min-height: 34px;
+  min-height: clamp(30px, 8.7vw, 34px);
   padding: 0 6px;
   border-radius: 9px;
   color: var(--xb-muted);
@@ -575,8 +620,8 @@ textarea.input {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 8px 16px calc(108px + env(safe-area-inset-bottom));
+  gap: var(--xb-page-gap);
+  padding: 8px var(--xb-pad-x) var(--xb-page-bottom);
   animation: page-in 0.24s ease both;
 }
 
@@ -590,7 +635,7 @@ textarea.input {
 
 .page-title {
   margin-top: 5px;
-  font-size: 24px;
+  font-size: var(--xb-page-title);
   font-weight: 800;
   letter-spacing: -0.6px;
   line-height: 1.15;
@@ -600,6 +645,7 @@ textarea.input {
   margin-top: 5px;
   color: var(--xb-muted);
   font-size: 11px;
+  font-size: clamp(10.5px, 2.9vw, 11px);
 }
 
 .section-head {
@@ -615,6 +661,7 @@ textarea.input {
   align-items: center;
   gap: 7px;
   font-size: 13px;
+  font-size: clamp(12.5px, 3.35vw, 13px);
   font-weight: 800;
   letter-spacing: 0.2px;
 }
@@ -717,6 +764,27 @@ textarea.input {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ==================== 屏幕高度适配 ====================
+   小尺寸安卓机与横屏时纵向空间紧张，收紧排版节奏，
+   让首屏尽量完整露出标题、主要内容与操作按钮。 */
+@media (max-height: 700px) {
+  :root {
+    --xb-page-gap: 11px;
+    --xb-page-title: 22px;
+    --xb-page-title: clamp(18px, 5.9vw, 22px);
+    --xb-control-h: 42px;
+    --xb-control-h: clamp(38px, 10.8vw, 42px);
+  }
+}
+
+@media (max-height: 560px) {
+  :root {
+    --xb-page-gap: 9px;
+    --xb-page-bottom: 86px;
+    --xb-page-bottom: calc(var(--xb-tab-h) + 34px + env(safe-area-inset-bottom));
   }
 }
 
