@@ -57,24 +57,9 @@ export function isCoverSeparationModel(model: PymssModel): boolean {
     /instrument|accompani|inst$|伴奏/.test(stem),
   )
   const isInstVox = /instvox|inst_vox|instrumental[_-]?vocal|duality/i.test(name)
-  const description = [
-    model.category_label,
-    model.primary_category_label,
-    model.secondary_category_label,
-    model.purpose_label,
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase()
-  const descriptionLooksUnsafe =
-    /双人|二重唱|对唱|合唱|男女声|男声|女声|语音|说话|多轨|单乐器|混响|回声|duet|duo|chorus|male.?female|speech|speaker|multi|instrument|guitar|bass|drum|piano|reverb|echo|dereverb|deecho|denoise/i.test(
-      description,
-    )
 
-  // 分类名明确是双人/二重唱、合唱、男女声、语音或多轨/单乐器时，
-  // 即使 target_stems 只有 vocals 也不是整曲翻唱可用的人声分离模型。
-  // 卡拉OK/和声的 backing_vocal 模型仍允许。
-  if (descriptionLooksUnsafe) return false
+  // 纯伴奏/多轨/语音模型即使目录元数据误标，也不能进入翻唱。
+  // instvox / inst_vox / duality 这类“人声-伴奏双向”命名例外。
   if (nameLooksUnsafe && !isInstVox) return false
 
   if (!stems.length) {
