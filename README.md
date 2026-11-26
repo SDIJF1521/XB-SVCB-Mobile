@@ -6,6 +6,7 @@ XB-SVCB 的 Android 伴生客户端，现已从桌面端仓库独立，拥有独
 - 桌面端项目：[https://github.com/SDIJF1521/xb-svcb](https://github.com/SDIJF1521/xb-svcb)
 - 桌面端 API 文档：[https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md](https://github.com/SDIJF1521/xb-svcb/blob/dev/docs/api.md)
 - 独立许可：GPL-3.0-only
+- 当前版本：v0.1.2（更新说明见 [docs/releases/](docs/releases/)）
 
 <p align="center">
   <img src="docs/screenshots/02-tasks.png" width="250" alt="作品列表" />
@@ -114,6 +115,7 @@ XB-SVCB-Mobile/
 ├─ docs/
 │  ├─ API.md               # 依赖的电脑端接口
 │  ├─ UI.md                # 界面自适应与布局规范
+│  ├─ releases/            # 各版本更新说明
 │  └─ screenshots/
 ├─ build-apk.ps1
 └─ README.md
@@ -165,6 +167,24 @@ adb install -r dist/XB-SVCB-Mobile-0.1.2.apk
 ```
 
 或直接把 APK 传到手机侧载安装。
+
+## 版本与发布
+
+- 版本号在三处保持一致：`build-apk.ps1` 的 `$VersionName` / `$VersionCode`、
+  `web/package.json` 与 `tools/package.json`。
+- 每次发布先写更新说明 `docs/releases/<版本>.md`（改动、验证数据、安装方式、校验值），
+  随代码一起提交，再打同名 tag 并创建 Release：
+
+```powershell
+git tag -a v0.1.2 -m "XB-SVCB Mobile v0.1.2"
+git push origin main --tags
+gh release create v0.1.2 --title "v0.1.2 · 屏幕自适应" `
+  --notes-file docs/releases/v0.1.2.md `
+  dist/XB-SVCB-Mobile-0.1.2.apk docs/releases/v0.1.2.md
+```
+
+- Release 的说明正文与附件都使用该 md，同时附上已签名的 APK。
+- 历史版本说明见 [docs/releases/](docs/releases/)。
 
 ## 连接电脑端
 
